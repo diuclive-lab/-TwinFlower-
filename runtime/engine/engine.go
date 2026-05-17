@@ -9,6 +9,7 @@ import (
 	"twinflower/root/cognition"
 	"twinflower/root/cognition/calibration"
 	"twinflower/root/providers"
+	"twinflower/vascular/skills/clarify"
 	"twinflower/vascular/skills/tool_selection"
 )
 
@@ -67,9 +68,19 @@ func (e *Engine) Handle(ctx context.Context, input string) (string, error) {
 		return "", fmt.Errorf("plan failed: %w", err)
 	}
 
-	// Check for clarification
+	// Check for clarification — use formal clarify skill
 	if plan.Content != "" && e.needsClarify(plan) {
-		return plan.Content, nil // the model's response IS the clarify question
+		candidates := extractCandidates(plan)
+		question := clarify.BuildQuestion(input, candidates, nil)
+		calibration.Log(calibration.Record{
+			Model:      e.cognitive.Name,
+			Intent:     "clarify",
+			Tool:       "clarify",
+			Confidence: plan.Confidence,
+			Clarified:  true,
+			Success:    true,
+		})
+		return question, nil
 	}
 
 	// Check forbidden tools
@@ -173,4 +184,19 @@ func (e *Engine) selectSkill(input string) *tool_selection.Skill {
 		return tool_selection.General()
 	}
 	return tool_selection.General()
+}
+
+// extractCandidates returns intent candidates from the plan result.
+func extractCandidates(plan *providers.PlanResult) []string {
+	candidates := []string{}
+	if plan.Tool != "" && plan.Tool != "clarify" {
+		candidates = append(candidates, plan.Tool)
+	}
+	for _, alt := range plan.Alternatives {
+		candidates = append(candidates, alt.Intent)
+	}
+	if len(candidates) == 0 {
+		return []string{"chat", "search"}
+	}
+	return candidates
 }

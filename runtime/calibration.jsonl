@@ -2,3 +2,4 @@
 {"timestamp":"2026-05-17T14:25:02Z","model":"qwen_dense","intent":"business_query","tool":"weather","confidence":0.8,"clarified":false,"success":true,"latency_ms":0}
 {"timestamp":"2026-05-17T14:33:45Z","model":"qwen_dense","intent":"general","tool":"","confidence":0.8,"clarified":false,"success":false,"latency_ms":0}
 {"timestamp":"2026-05-17T14:34:19Z","model":"qwen_dense","intent":"general","tool":"","confidence":0.8,"clarified":false,"success":false,"latency_ms":0}
+{"timestamp":"2026-05-17T14:38:16Z","model":"qwen_dense","intent":"general","tool":"","confidence":0.8,"clarified":false,"success":false,"latency_ms":0}
