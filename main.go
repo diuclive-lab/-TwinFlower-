@@ -15,6 +15,7 @@ import (
 	"strings"
 
 	"twinflower/root/cognition"
+	"twinflower/root/cognition/preferences"
 	"twinflower/root/providers"
 	"twinflower/runtime/engine"
 	"twinflower/stem/tools/filesystem"
@@ -31,8 +32,12 @@ func main() {
 	// ── Cognitive Profile ───────────────────────────────────────────────
 	cp := cognition.QwenDense()
 
+	// ── Preferences ─────────────────────────────────────────────────────
+	prefs := preferences.NewStore("runtime/preferences.jsonl")
+
 	// ── Engine ──────────────────────────────────────────────────────────
 	e := engine.New(provider, cp)
+	e.SetPreferences(prefs)
 
 	// Register tools
 	e.RegisterTool(weather.New())

@@ -3,3 +3,10 @@
 {"timestamp":"2026-05-17T14:33:45Z","model":"qwen_dense","intent":"general","tool":"","confidence":0.8,"clarified":false,"success":false,"latency_ms":0}
 {"timestamp":"2026-05-17T14:34:19Z","model":"qwen_dense","intent":"general","tool":"","confidence":0.8,"clarified":false,"success":false,"latency_ms":0}
 {"timestamp":"2026-05-17T14:38:16Z","model":"qwen_dense","intent":"general","tool":"","confidence":0.8,"clarified":false,"success":false,"latency_ms":0}
+{"timestamp":"2026-05-17T14:42:51Z","model":"qwen_dense","intent":"general","tool":"","confidence":0.8,"clarified":false,"success":false,"latency_ms":0}
+{"timestamp":"2026-05-17T14:43:16Z","model":"qwen_dense","intent":"general","tool":"","confidence":0.8,"clarified":false,"success":false,"latency_ms":0}
+{"timestamp":"2026-05-17T14:44:11Z","model":"qwen_dense","intent":"preference_resolve","tool":"weather","confidence":0.87,"clarified":false,"success":true,"latency_ms":0}
+{"timestamp":"2026-05-17T14:44:41Z","model":"qwen_dense","intent":"preference_resolve","tool":"weather","confidence":0.87,"clarified":false,"success":true,"latency_ms":0}
+{"timestamp":"2026-05-17T14:44:48Z","model":"qwen_dense","intent":"general","tool":"weather","confidence":0.87,"clarified":false,"success":true,"latency_ms":0}
+{"timestamp":"2026-05-17T14:44:58Z","model":"qwen_dense","intent":"preference_resolve","tool":"weather","confidence":0.87,"clarified":false,"success":true,"latency_ms":0}
+{"timestamp":"2026-05-17T14:45:03Z","model":"qwen_dense","intent":"general","tool":"weather","confidence":0.87,"clarified":false,"success":true,"latency_ms":0}

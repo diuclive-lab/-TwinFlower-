@@ -8,6 +8,7 @@ import (
 
 	"twinflower/root/cognition"
 	"twinflower/root/cognition/calibration"
+	"twinflower/root/cognition/preferences"
 	"twinflower/root/providers"
 	"twinflower/vascular/skills/clarify"
 	"twinflower/vascular/skills/tool_selection"
@@ -21,11 +22,15 @@ type Tool interface {
 
 // Engine is the minimal runtime.
 type Engine struct {
-	provider    providers.Provider
-	cognitive   *cognition.Profile // model cognitive profile
-	tools       map[string]Tool
-	skills      map[string]*tool_selection.Skill
+	provider        providers.Provider
+	cognitive       *cognition.Profile
+	tools           map[string]Tool
+	skills          map[string]*tool_selection.Skill
+	prefs           *preferences.Store
 }
+
+// SetPreferences attaches a preference store for adaptive clarification.
+func (e *Engine) SetPreferences(p *preferences.Store) { e.prefs = p }
 
 // New creates an engine. If profile is nil, uses QwenDense default.
 func New(p providers.Provider, cp *cognition.Profile) *Engine {
@@ -68,7 +73,28 @@ func (e *Engine) Handle(ctx context.Context, input string) (string, error) {
 		return "", fmt.Errorf("plan failed: %w", err)
 	}
 
-	// Check for clarification — use formal clarify skill
+	// Preference resolution: if model chose no tool, check preferences
+	if plan.Tool == "" && e.prefs != nil {
+		preferred, adjustedConf := e.prefs.Lookup(input)
+		if preferred != "" && adjustedConf >= e.cognitive.ClarifyThreshold {
+			plan.Tool = preferred
+			plan.Confidence = adjustedConf
+			if preferred == "weather" && plan.Args == nil {
+				plan.Args = map[string]any{"location": extractCity(input)}
+			}
+			calibration.Log(calibration.Record{
+				Model:      e.cognitive.Name,
+				Intent:     "preference_resolve",
+				Tool:       preferred,
+				Confidence: adjustedConf,
+				Clarified:  false,
+				Success:    true,
+			})
+			goto executeTool
+		}
+	}
+
+	// Check for clarification
 	if plan.Content != "" && e.needsClarify(plan) {
 		candidates := extractCandidates(plan)
 		question := clarify.BuildQuestion(input, candidates, nil)
@@ -82,6 +108,8 @@ func (e *Engine) Handle(ctx context.Context, input string) (string, error) {
 		})
 		return question, nil
 	}
+
+executeTool:
 
 	// Check forbidden tools
 	if plan.Tool != "" && skill.Forbidden(plan.Tool) {
@@ -187,6 +215,16 @@ func (e *Engine) selectSkill(input string) *tool_selection.Skill {
 }
 
 // extractCandidates returns intent candidates from the plan result.
+func extractCity(input string) string {
+	knownCities := []string{"北京", "上海", "广州", "深圳", "杭州", "成都", "南京", "武汉", "天津", "重庆", "苏州", "西安", "长沙", "郑州", "东莞", "青岛", "沈阳", "宁波", "昆明", "大连"}
+	for _, city := range knownCities {
+		if strings.Contains(input, city) {
+			return city
+		}
+	}
+	return "Beijing"
+}
+
 func extractCandidates(plan *providers.PlanResult) []string {
 	candidates := []string{}
 	if plan.Tool != "" && plan.Tool != "clarify" {
