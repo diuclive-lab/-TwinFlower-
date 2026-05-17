@@ -73,6 +73,8 @@ func (e *Engine) Handle(ctx context.Context, input string) (string, error) {
 		return "", fmt.Errorf("plan failed: %w", err)
 	}
 
+	var softMsg string // soft execute hint
+
 	// Preference resolution: if model chose no tool, check preferences
 	if plan.Tool == "" && e.prefs != nil {
 		preferred, adjustedConf := e.prefs.Lookup(input)
@@ -82,6 +84,7 @@ func (e *Engine) Handle(ctx context.Context, input string) (string, error) {
 			if preferred == "weather" && plan.Args == nil {
 				plan.Args = map[string]any{"location": extractCity(input)}
 			}
+			softMsg = fmt.Sprintf("> 猜你是想查%s%s\n（如果不是请纠正）\n", describeIntent(preferred), extractCity(input))
 			calibration.Log(calibration.Record{
 				Model:      e.cognitive.Name,
 				Intent:     "preference_resolve",
@@ -145,7 +148,7 @@ executeTool:
 		Success:    err == nil && toolResult != "",
 	})
 
-	return response, nil
+	return softMsg + response, nil
 }
 
 // needsClarify returns true if the plan indicates low confidence or ambiguity.
@@ -223,6 +226,19 @@ func extractCity(input string) string {
 		}
 	}
 	return "Beijing"
+}
+
+func describeIntent(intent string) string {
+	m := map[string]string{
+		"weather":         "天气（",
+		"search":          "信息（",
+		"filesystem_list": "目录（",
+		"translate":       "翻译（",
+	}
+	if v, ok := m[intent]; ok {
+		return v
+	}
+	return intent + "（"
 }
 
 func extractCandidates(plan *providers.PlanResult) []string {

@@ -29,10 +29,12 @@ type Pattern struct {
 func (p *Pattern) effectiveConfidence() float64 {
 	base := p.Confidence
 
-	// Recency decay: older patterns get penalized
-	daysSinceLastSeen := time.Since(time.Unix(p.LastSeen, 0)).Hours() / 24
-	if daysSinceLastSeen > 0 {
-		base *= math.Exp(-decayLambda * daysSinceLastSeen)
+	// Recency decay: older patterns get penalized (skip if unset)
+	if p.LastSeen > 0 {
+		daysSinceLastSeen := time.Since(time.Unix(p.LastSeen, 0)).Hours() / 24
+		if daysSinceLastSeen > 0 {
+			base *= math.Exp(-decayLambda * daysSinceLastSeen)
+		}
 	}
 
 	// Negative correction: if user has corrected this pattern, reduce confidence
