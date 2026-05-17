@@ -118,6 +118,17 @@ repository_analysis_workflow:
 
 ---
 
+## 认知系统
+
+模型不是"理解"语言，是需要适配的大脑。
+
+详见 [`docs/architecture/cognitive_system.md`](docs/architecture/cognitive_system.md)
+- 认知适配矩阵（架构层 × 行为层）
+- 在线校准（运行中自动调整 clarify 阈值）
+- 与 Phase 2（clarify / intent evidence / failure learning）的关系
+
+---
+
 ## 设计原则
 
 1. **模型是根。** 所有能力围绕模型，而不是围绕框架。
