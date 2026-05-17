@@ -67,7 +67,7 @@ func BusinessQuery() *Skill {
 	return New(Contract{
 		Name:         "business_query",
 		Goal:         "Answer business queries like weather, translation, stock prices, currency conversion",
-		AllowedTools: []string{"weather", "translate", "stock", "currency"},
+		AllowedTools: []string{"weather", "translate", "stock", "currency", "search"},
 		PromptHint:   "Use the appropriate business tool for the query",
 	})
 }

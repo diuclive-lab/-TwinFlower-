@@ -10,3 +10,6 @@
 {"timestamp":"2026-05-17T14:44:48Z","model":"qwen_dense","intent":"general","tool":"weather","confidence":0.87,"clarified":false,"success":true,"latency_ms":0}
 {"timestamp":"2026-05-17T14:44:58Z","model":"qwen_dense","intent":"preference_resolve","tool":"weather","confidence":0.87,"clarified":false,"success":true,"latency_ms":0}
 {"timestamp":"2026-05-17T14:45:03Z","model":"qwen_dense","intent":"general","tool":"weather","confidence":0.87,"clarified":false,"success":true,"latency_ms":0}
+{"timestamp":"2026-05-17T14:48:23Z","model":"qwen_dense","intent":"business_query","tool":"translate","confidence":0.8,"clarified":false,"success":true,"latency_ms":0}
+{"timestamp":"2026-05-17T14:48:32Z","model":"qwen_dense","intent":"business_query","tool":"translate","confidence":0.8,"clarified":false,"success":true,"latency_ms":0}
+{"timestamp":"2026-05-17T14:48:52Z","model":"qwen_dense","intent":"business_query","tool":"translate","confidence":0.8,"clarified":false,"success":true,"latency_ms":0}
