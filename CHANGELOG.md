@@ -21,4 +21,8 @@
 
 **当前模型：** Qwen3.6-27B（本地，port 8090）
 
-**Phase 1 完成度：** 工具 4/10（weather, filesystem_list, filesystem_read, filesystem_search），认知骨架 2 architecture × 2 behavior + calibration
+**Phase 1 完成度：** 工具 6/10（weather, filesystem, search, translate），认知骨架 + clarify 契约 + preference learning + calibration
+
+**关键 commit：**
+- `e6b1e47` — Adaptive clarify: preference learning + soft resolve
+- `d8c992d` — Translate baseline: 认知层不污染简单任务
