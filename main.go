@@ -14,6 +14,7 @@ import (
 	"os"
 	"strings"
 
+	"twinflower/root/cognition"
 	"twinflower/root/providers"
 	"twinflower/runtime/engine"
 	"twinflower/stem/tools/weather"
@@ -25,8 +26,11 @@ func main() {
 	// ── Model ───────────────────────────────────────────────────────────
 	provider := providers.NewLocalProvider("http://127.0.0.1:8090", "qwen3.6-27B", "local-dev")
 
+	// ── Cognitive Profile ───────────────────────────────────────────────
+	cp := cognition.QwenDense()
+
 	// ── Engine ──────────────────────────────────────────────────────────
-	e := engine.New(provider)
+	e := engine.New(provider, cp)
 
 	// Register tools
 	e.RegisterTool(weather.New())
