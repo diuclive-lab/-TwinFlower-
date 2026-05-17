@@ -1,0 +1,6 @@
+# Gemma behavior profile
+overcommit: medium
+tool_aggressiveness: cautious
+clarify_preference: high
+ambiguity_tolerance: medium
+reasoning_strength: medium

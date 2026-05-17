@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"twinflower/root/cognition"
+	"twinflower/root/cognition/calibration"
 	"twinflower/root/providers"
 	"twinflower/vascular/skills/tool_selection"
 )
@@ -95,6 +96,15 @@ func (e *Engine) Handle(ctx context.Context, input string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("finalize failed: %w", err)
 	}
+
+	// Record calibration data
+	calibration.Log(calibration.Record{
+		Model:      e.cognitive.Name,
+		Intent:     skill.Contract().Name,
+		Tool:       plan.Tool,
+		Confidence: plan.Confidence,
+		Success:    err == nil && toolResult != "",
+	})
 
 	return response, nil
 }

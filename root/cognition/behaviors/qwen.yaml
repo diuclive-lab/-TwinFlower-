@@ -1,0 +1,6 @@
+# Qwen behavior profile
+overcommit: high
+tool_aggressiveness: aggressive
+clarify_preference: low
+ambiguity_tolerance: low
+reasoning_strength: medium

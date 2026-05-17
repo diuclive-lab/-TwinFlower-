@@ -1,0 +1,6 @@
+# MoE architecture: internal router selects expert per token.
+# Prone to routing shortcuts, needs gated decomposition.
+chain_style: gated
+tool_bias: conservative
+clarify_threshold: 0.65
+prompt_granularity: coarse

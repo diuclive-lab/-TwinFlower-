@@ -1,0 +1,6 @@
+# Dense architecture: each token activates all parameters.
+# Stable, deterministic, needs explicit reasoning prompts.
+chain_style: explicit
+tool_bias: balanced
+clarify_threshold: 0.45
+prompt_granularity: fine
