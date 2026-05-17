@@ -109,13 +109,22 @@ func (e *Engine) Handle(ctx context.Context, input string) (string, error) {
 	return response, nil
 }
 
-// needsClarify returns true if the plan indicates low confidence.
+// needsClarify returns true if the plan indicates low confidence or ambiguity.
 func (e *Engine) needsClarify(plan *providers.PlanResult) bool {
+	// Explicit tool "clarify" selected (model output)
+	if plan.Tool == "clarify" {
+		return true
+	}
+	// Low confidence regardless of tool selection
 	if plan.Confidence < e.cognitive.ClarifyThreshold {
 		return true
 	}
-	if plan.Tool == "clarify" {
-		return true
+	// Check for close alternatives (gap < 0.15 between primary and first alternative)
+	if len(plan.Alternatives) > 0 && plan.Tool != plan.Alternatives[0].Intent {
+		gap := plan.Confidence - plan.Alternatives[0].Score
+		if gap >= 0 && gap < 0.15 {
+			return true
+		}
 	}
 	return false
 }
@@ -158,6 +167,10 @@ func (e *Engine) selectSkill(input string) *tool_selection.Skill {
 		strings.Contains(lower, "股价") || strings.Contains(lower, "stock") ||
 		strings.Contains(lower, "汇率") || strings.Contains(lower, "currency") {
 		return tool_selection.BusinessQuery()
+	}
+	if strings.Contains(lower, "搜索") || strings.Contains(lower, "search") ||
+		strings.Contains(lower, "查一下") || strings.Contains(lower, "找一下") {
+		return tool_selection.General()
 	}
 	return tool_selection.General()
 }

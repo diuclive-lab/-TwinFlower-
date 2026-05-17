@@ -17,5 +17,8 @@
 **关键 commit：**
 - `4f6c67c` — Phase 1 最小生根
 - `6f38ed4` — 认知适配层
+- `7dd5c35` — 垂直切片：filesystem + calibration 骨架
 
 **当前模型：** Qwen3.6-27B（本地，port 8090）
+
+**Phase 1 完成度：** 工具 4/10（weather, filesystem_list, filesystem_read, filesystem_search），认知骨架 2 architecture × 2 behavior + calibration

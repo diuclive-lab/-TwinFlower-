@@ -18,6 +18,7 @@ import (
 	"twinflower/root/providers"
 	"twinflower/runtime/engine"
 	"twinflower/stem/tools/filesystem"
+	"twinflower/stem/tools/search"
 	"twinflower/stem/tools/weather"
 )
 
@@ -38,6 +39,7 @@ func main() {
 	e.RegisterTool(filesystem.NewList())
 	e.RegisterTool(filesystem.NewRead())
 	e.RegisterTool(filesystem.NewSearch())
+	e.RegisterTool(search.New())
 	// More tools will be added as they're migrated from 66
 
 	// ── Process input ────────────────────────────────────────────────────
