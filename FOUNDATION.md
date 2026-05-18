@@ -29,7 +29,8 @@
              思考能力
                     │
                     │
-          66（堆肥 / 营养）
+          66（演化土壤）
+      nutrient / lessons / anti_patterns / decision_history
 ```
 
 ---
@@ -109,12 +110,13 @@ repository_analysis_workflow:
 
 ## 营养审计 (66 → 双生花)
 
-详见 [`compost/nutrient_audit.md`](compost/nutrient_audit.md)
+详见 [`compost/nutrient/README.md`](compost/nutrient/README.md) 和 [`compost/lessons/`](compost/lessons/)。
 
-三类标记：
-- **ROOT-READY** — 直接吸收 (20 模块)
-- **STEM-LATER** — 后续再长 (11 模块)
-- **COMPOST** — 留在 66 (18 模块)
+四类标记：
+- **NUTRIENT** — 直接吸收 (见 nutrient/)
+- **LESSONS** — 经验沉淀 (见 lessons/)
+- **ANTI-PATTERNS** — 禁止迁移 (见 anti_patterns/)
+- **DECISIONS** — 架构记忆 (见 decision_history/)
 
 ---
 
