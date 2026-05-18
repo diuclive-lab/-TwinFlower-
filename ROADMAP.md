@@ -66,15 +66,22 @@ echo "北京天气" | go run .
 
 ## Phase 4 — 右花（探索）
 
-目标：探索能力可用，能跑实验。
+目标：探索花成为双生花的研究器官，而非验证系统。
 
 **交付：**
-- 探索花入口（调用 Gemma-4-31B）
-- 长思考模式（多步推理）
-- 实验数据记录
-- 能力迁移通道（探索 → 日常）
+- `flowers/explore/evals/` — Exploration Bench（能力成长测试，非门禁）
+- `flowers/explore/shadow/` — Cognitive Shadow（假设性执行对比，不参与 runtime）
+- `flowers/explore/drift/` — Preference Drift（认知漂移观测）
+- `flowers/explore/evidence/` — Evidence Graph（因果可视化）
+- `flowers/explore/model_lab/` — Model Lab（离线模型对比）
+
+**不做的：**
+- Release Freeze
+- Gate Explosion
+- Full Shadow Everything
+- 线上双路执行
 
 **验收：**
-- 探索花能独立启动
-- 实验数据落地
-- 成功能力可回流到日常花
+- 右花能独立运行实验
+- 实验失败不影响左花日常使用
+- 能力可从右花沉淀到左花 Skills

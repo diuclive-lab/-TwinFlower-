@@ -79,19 +79,21 @@ code_search_skill:
 
 Skill = 流程 + 约束。这是防止模型乱用工具的关键。
 
-### 第四层：花 — Workflows（多步任务）
+### 第四层：花 — 双花分工
 
-Workflow 组合多个 Skill 完成复杂目标。
+双花共用根、茎、维管束。但目标不同。
 
-```
-repository_analysis_workflow:
-  步骤:
-    1. code_search_skill (理解结构)
-    2. file_compare_skill (对比变化)
-    3. proposal_skill (生成建议)
-```
+**左花（日常花 / Operational Flower）：**
+- 目标：低摩擦、稳定、直接完成任务
+- 关注：execute / adapt / remember / respond
+- 不设 gate，不阻塞发布
 
-日常花的工作流偏向稳定、可预测。探索花的工作流偏向实验、长思考、自我恢复。
+**右花（探索花 / Experimental Flower）：**
+- 目标：实验、验证、反思、演化
+- 关注：eval / shadow / drift / evidence / model comparison
+- 不参与 runtime 决策，不产生 gate
+
+这就是 66 验证线的真正归宿：不是留在 66，也不是侵入主线，而是成为探索花的研究器官。
 
 ---
 
@@ -139,7 +141,10 @@ repository_analysis_workflow:
 4. **双花共享茎和维管束。** 工具和技能不分日常还是探索。
 5. **新能力先在探索花生根。** 成熟后沉淀为技能，右花到左花。
 6. **66 是养分，不是束缚。** 吸收经验，不复制结构。
-7. **宪章优先于代码。** 先想清楚，再动手。
+7. **右花不阻塞左花。** 探索失败不影响日常使用。
+8. **右花不产生 gate。** 观测结果不阻止发布。
+9. **能力沉淀是从右到左。** 右花实验成功，沉淀为技能，左花使用。
+10. **66 是土壤层，不是代码层。** 吸收经验，不继承形态。
 
 ---
 

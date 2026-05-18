@@ -71,23 +71,17 @@
 
 ## flowers/ — 花
 
-三层：共享行为 → 日常 → 探索。
+双花分工：左花 = Operational Flower（日常），右花 = Experimental Flower（探索）。
 
-| 目录 | 英文 | 中文 |
+| 目录 | 解释 | 来源 |
 |------|------|------|
-| `flowers/shared/` | Shared behavior layer | 共享行为层 |
-| `flowers/daily/chat/` | Chat interface | 聊天对话 |
-| `flowers/daily/assistant/` | General assistant | 通用助手 |
-| `flowers/daily/tasks/` | Task execution | 任务执行 |
-| `flowers/daily/routines/` | Recurring routines | 固定流程 |
-| `flowers/daily/memory/` | Daily memory | 日常记忆 |
-| `flowers/daily/policies/` | Daily policies | 日常策略 |
-| `flowers/explore/research/` | Deep research | 深度研究 |
-| `flowers/explore/workflow/` | Multi-step workflow | 多步工作流 |
-| `flowers/explore/autonomous/` | Autonomous agent | 自主智能体 |
-| `flowers/explore/recovery/` | Self healing | 自我恢复 |
-| `flowers/explore/planning/` | Long-term planning | 长期规划 |
-| `flowers/explore/experiments/` | Experimental code | 实验代码 |
+| `flowers/daily/` | **左花:** execute / adapt / remember / respond | — |
+| `flowers/explore/` | **右花:** 实验、验证、观测、演化 | — |
+| `explore/evals/` | Exploration Bench — 能力成长测试 | 66 的 Eval Harness 重构 |
+| `explore/shadow/` | Cognitive Shadow — 假设性执行对比 | 66 的 Shadow 轻量化 |
+| `explore/drift/` | Preference Drift — 认知漂移观测 | 66 的 Drift Detection |
+| `explore/evidence/` | Evidence Graph — 因果可视化 | 66 的 Evidence Graph |
+| `explore/model_lab/` | Model Lab — 离线模型对比 | 66 的 Router A/B 限定 |
 
 ---
 
