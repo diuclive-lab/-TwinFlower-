@@ -143,3 +143,44 @@ input
   → 反馈: calibration logging
   → 根: finalize (natural response formatting)
 ```
+
+---
+
+## 2026-05-18 (part 2)
+
+### 重构 compost: 66 从"堆肥"重新定义为"演化土壤"
+
+66 在双生花中不再只是代码源，而是四层养分体系：
+
+```
+compost/
+  nutrient/         矿物质 — 可直接移植的代码 (stock/currency/envutil/httputil/retry)
+  lessons/          腐殖质 — 失败经验沉淀 (shadow router/gate overgrowth/intent routing)
+  anti_patterns/    毒素标记 — 禁止迁移的模式
+  decision_history/ 菌根网络 — 架构决策记录 (P2 freeze/skill≠tool/bypass)
+```
+
+### 重构右花: 验证线从"免疫系统"重构成"研究器官"
+
+66 的验证线不搬进双生花, 而是重新解释为探索花的 5 个实验域:
+
+| 域 | 66 来源 | 新定位 | 关键改造 |
+|----|---------|--------|---------|
+| `explore/evals/` | Eval Harness | Exploration Bench | 去 gate 语义，加 Delta 演化对比 |
+| `explore/shadow/` | Shadow Router | Cognitive Shadow | 去 cutover/promotion，纯记录 |
+| `explore/drift/` | Drift Detection | Preference Drift | 去 gate 触发，Severity 分级 |
+| `explore/evidence/` | Evidence Graph | 因果可视化 | 从验证工具变为探索工具 |
+| `explore/model_lab/` | Router A/B | 离线模型对比 | 从线上双路变为 offline research |
+
+**右花原则:**
+- 右花不阻塞左花, 右花不产生 gate
+- 能力从右花沉淀到左花 Skills (成熟后再迁移)
+
+### 关键提交
+
+| Commit | 内容 |
+|--------|------|
+| `db8b490` | 重构 compost: 66 → 演化土壤 |
+| `cfbfc23` | 重构右花: 验证线 → 研究器官 |
+| `6aee09a` | 探索花 evals: Exploration Bench |
+| `b397cc9` | 探索花: shadow/drift/evidence/model_lab |
