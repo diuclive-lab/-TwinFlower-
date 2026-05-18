@@ -1,4 +1,4 @@
-// Package search provides a web search tool using DuckDuckGo (no API key).
+// Package search provides a web search tool using DuckDuckGo (no API key needed).
 package search
 
 import (
@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 )
 
 const duckduckgoURL = "https://html.duckduckgo.com/html/"
@@ -30,9 +31,18 @@ func (t *Tool) Run(ctx context.Context, args map[string]any) (string, error) {
 		return "", fmt.Errorf("search: query is required")
 	}
 
+	client := &http.Client{Timeout: 15 * time.Second}
 	v := url.Values{}
 	v.Set("q", query)
-	resp, err := http.PostForm(duckduckgoURL, v)
+
+	req, err := http.NewRequestWithContext(ctx, "POST", duckduckgoURL, strings.NewReader(v.Encode()))
+	if err != nil {
+		return "", fmt.Errorf("search: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+
+	resp, err := client.Do(req)
 	if err != nil {
 		return "", fmt.Errorf("search: %w", err)
 	}
@@ -40,8 +50,8 @@ func (t *Tool) Run(ctx context.Context, args map[string]any) (string, error) {
 
 	body, _ := io.ReadAll(resp.Body)
 	text := extractText(string(body))
-	if len(text) > 2000 {
-		text = text[:2000] + "..."
+	if len(text) > 3000 {
+		text = text[:3000] + "..."
 	}
 	return text, nil
 }
@@ -51,7 +61,6 @@ func extractText(html string) string {
 	lines := strings.Split(html, "\n")
 	for _, line := range lines {
 		trimmed := strings.TrimSpace(line)
-		// Extract result snippets from DDG HTML
 		if strings.Contains(trimmed, "class=\"result__snippet\"") ||
 			strings.Contains(trimmed, "class=\"result__title\"") {
 			text := stripTags(trimmed)

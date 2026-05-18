@@ -12,6 +12,7 @@ import (
 	"twinflower/root/providers"
 	"twinflower/vascular/skills/clarify"
 	fs_skill "twinflower/vascular/skills/filesystem_skill"
+	search_skill "twinflower/vascular/skills/search_skill"
 	"twinflower/vascular/skills/tool_selection"
 )
 
@@ -29,11 +30,13 @@ type Engine struct {
 	skills          map[string]*tool_selection.Skill
 	prefs           *preferences.Store
 	filesystemSkill *fs_skill.Skill // procedural filesystem intelligence
+	searchSkill     *search_skill.Skill // procedural search intelligence
 }
 
 // SetPreferences attaches a preference store for adaptive clarification.
 func (e *Engine) SetPreferences(p *preferences.Store) { e.prefs = p }
 func (e *Engine) SetFilesystemSkill(s *fs_skill.Skill) { e.filesystemSkill = s }
+func (e *Engine) SetSearchSkill(s *search_skill.Skill) { e.searchSkill = s }
 
 // New creates an engine. If profile is nil, uses QwenDense default.
 func New(p providers.Provider, cp *cognition.Profile) *Engine {
@@ -73,6 +76,21 @@ func (e *Engine) Handle(ctx context.Context, input string) (string, error) {
 		}
 	}
 
+
+	// Search skill bypass
+	if e.searchSkill != nil && isSearchRequest(input) {
+		result, err := e.searchSkill.Handle(ctx, input)
+		if err == nil {
+			calibration.Log(calibration.Record{
+				Model:      e.cognitive.Name,
+				Intent:     "search_skill",
+				Tool:       "search_skill",
+				Confidence: 0.85,
+				Success:    true,
+			})
+			return result, nil
+		}
+	}
 	// Build tool descriptions
 	var toolDefs []providers.ToolDef
 	for _, name := range skill.Contract().AllowedTools {
@@ -259,13 +277,27 @@ func describeIntent(intent string) string {
 	return intent + "（"
 }
 
+func isSearchRequest(input string) bool {
+	lower := strings.ToLower(strings.TrimSpace(input))
+	keywords := []string{
+		"搜索", "搜一下", "查一下", "查找", "查询", "帮我查",
+		"search", "find ", "look up",
+	}
+	for _, kw := range keywords {
+		if strings.Contains(lower, kw) {
+			return true
+		}
+	}
+	return false
+}
+
 func isFilesystemRequest(input string) bool {
 	lower := strings.ToLower(strings.TrimSpace(input))
 	keywords := []string{
 		"文件", "目录", "文件夹", "路径",
 		"file", "dir", "folder", "directory", "path",
 		"列出", "列表", "最大的", "大文件",
-		"list", "ls", "find", "search",
+		"list", "ls", "find",
 		"read", "cat", "打开", "读",
 	}
 	for _, kw := range keywords {

@@ -13,6 +13,7 @@ import (
 	"twinflower/root/providers"
 	"twinflower/runtime/engine"
 	fs_skill "twinflower/vascular/skills/filesystem_skill"
+	search_skill "twinflower/vascular/skills/search_skill"
 	"twinflower/stem/tools/filesystem"
 	"twinflower/stem/tools/search"
 	"twinflower/stem/tools/translate"
@@ -45,6 +46,7 @@ func main() {
 		"filesystem_search": filesystem.NewSearch(),
 	}
 	e.SetFilesystemSkill(fs_skill.New(fsTools))
+	e.SetSearchSkill(search_skill.New(search.New()))
 
 	input := strings.Join(os.Args[1:], " ")
 	if input == "" {
