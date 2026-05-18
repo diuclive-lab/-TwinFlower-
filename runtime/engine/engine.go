@@ -11,6 +11,7 @@ import (
 	"twinflower/root/cognition/preferences"
 	"twinflower/root/providers"
 	"twinflower/vascular/skills/clarify"
+	fs_skill "twinflower/vascular/skills/filesystem_skill"
 	"twinflower/vascular/skills/tool_selection"
 )
 
@@ -27,10 +28,12 @@ type Engine struct {
 	tools           map[string]Tool
 	skills          map[string]*tool_selection.Skill
 	prefs           *preferences.Store
+	filesystemSkill *fs_skill.Skill // procedural filesystem intelligence
 }
 
 // SetPreferences attaches a preference store for adaptive clarification.
 func (e *Engine) SetPreferences(p *preferences.Store) { e.prefs = p }
+func (e *Engine) SetFilesystemSkill(s *fs_skill.Skill) { e.filesystemSkill = s }
 
 // New creates an engine. If profile is nil, uses QwenDense default.
 func New(p providers.Provider, cp *cognition.Profile) *Engine {
@@ -53,6 +56,21 @@ func (e *Engine) Handle(ctx context.Context, input string) (string, error) {
 	skill := e.selectSkill(input)
 	if skill == nil {
 		skill = tool_selection.General()
+	}
+
+	// Filesystem skill bypass: handle directly without model call
+	if e.filesystemSkill != nil && isFilesystemRequest(input) {
+		result, err := e.filesystemSkill.Handle(ctx, input)
+		if err == nil {
+			calibration.Log(calibration.Record{
+				Model:      e.cognitive.Name,
+				Intent:     "filesystem_skill",
+				Tool:       "filesystem_skill",
+				Confidence: 0.85,
+				Success:    true,
+			})
+			return result, nil
+		}
 	}
 
 	// Build tool descriptions
@@ -239,6 +257,23 @@ func describeIntent(intent string) string {
 		return v
 	}
 	return intent + "（"
+}
+
+func isFilesystemRequest(input string) bool {
+	lower := strings.ToLower(strings.TrimSpace(input))
+	keywords := []string{
+		"文件", "目录", "文件夹", "路径",
+		"file", "dir", "folder", "directory", "path",
+		"列出", "列表", "最大的", "大文件",
+		"list", "ls", "find", "search",
+		"read", "cat", "打开", "读",
+	}
+	for _, kw := range keywords {
+		if strings.Contains(lower, kw) {
+			return true
+		}
+	}
+	return false
 }
 
 func extractCandidates(plan *providers.PlanResult) []string {

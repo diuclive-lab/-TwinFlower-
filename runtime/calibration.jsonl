@@ -22,3 +22,16 @@
 {"timestamp":"2026-05-17T15:48:12Z","model":"qwen_dense","intent":"general","tool":"weather","confidence":0.87,"clarified":false,"success":true,"latency_ms":0}
 {"timestamp":"2026-05-17T15:48:31Z","model":"qwen_dense","intent":"general","tool":"","confidence":0.8,"clarified":false,"success":false,"latency_ms":0}
 {"timestamp":"2026-05-17T15:49:14Z","model":"qwen_dense","intent":"general","tool":"","confidence":0.8,"clarified":false,"success":false,"latency_ms":0}
+{"timestamp":"2026-05-18T13:26:59Z","model":"qwen_dense","intent":"general","tool":"","confidence":0.8,"clarified":false,"success":false,"latency_ms":0}
+{"timestamp":"2026-05-18T13:27:20Z","model":"qwen_dense","intent":"general","tool":"","confidence":0.8,"clarified":false,"success":false,"latency_ms":0}
+{"timestamp":"2026-05-18T13:27:30Z","model":"qwen_dense","intent":"business_query","tool":"weather","confidence":0.8,"clarified":false,"success":true,"latency_ms":0}
+{"timestamp":"2026-05-18T13:27:49Z","model":"qwen_dense","intent":"general","tool":"","confidence":0.8,"clarified":false,"success":false,"latency_ms":0}
+{"timestamp":"2026-05-18T13:28:14Z","model":"qwen_dense","intent":"general","tool":"","confidence":0.8,"clarified":false,"success":false,"latency_ms":0}
+{"timestamp":"2026-05-18T13:28:29Z","model":"qwen_dense","intent":"general","tool":"","confidence":0.8,"clarified":false,"success":false,"latency_ms":0}
+{"timestamp":"2026-05-18T13:29:18Z","model":"qwen_dense","intent":"general","tool":"","confidence":0.8,"clarified":false,"success":false,"latency_ms":0}
+{"timestamp":"2026-05-18T13:29:45Z","model":"qwen_dense","intent":"general","tool":"","confidence":0.8,"clarified":false,"success":false,"latency_ms":0}
+{"timestamp":"2026-05-18T13:29:51Z","model":"qwen_dense","intent":"business_query","tool":"weather","confidence":0.8,"clarified":false,"success":true,"latency_ms":0}
+{"timestamp":"2026-05-18T13:30:33Z","model":"qwen_dense","intent":"filesystem_skill","tool":"filesystem_skill","confidence":0.85,"clarified":false,"success":true,"latency_ms":0}
+{"timestamp":"2026-05-18T13:30:47Z","model":"qwen_dense","intent":"filesystem_skill","tool":"filesystem_skill","confidence":0.85,"clarified":false,"success":true,"latency_ms":0}
+{"timestamp":"2026-05-18T13:30:53Z","model":"qwen_dense","intent":"business_query","tool":"weather","confidence":0.8,"clarified":false,"success":true,"latency_ms":0}
+{"timestamp":"2026-05-18T13:30:53Z","model":"qwen_dense","intent":"filesystem_skill","tool":"filesystem_skill","confidence":0.85,"clarified":false,"success":true,"latency_ms":0}

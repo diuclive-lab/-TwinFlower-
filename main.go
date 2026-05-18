@@ -1,10 +1,4 @@
 // TwinFlower — Phase 1: Minimal Rooting
-//
-// Usage:
-//
-//	go run . "北京天气"
-//	go run . "hello翻译成日语"
-//	go run . "列出当前目录"
 package main
 
 import (
@@ -18,6 +12,7 @@ import (
 	"twinflower/root/cognition/preferences"
 	"twinflower/root/providers"
 	"twinflower/runtime/engine"
+	fs_skill "twinflower/vascular/skills/filesystem_skill"
 	"twinflower/stem/tools/filesystem"
 	"twinflower/stem/tools/search"
 	"twinflower/stem/tools/translate"
@@ -27,29 +22,30 @@ import (
 func main() {
 	ctx := context.Background()
 
-	// ── Model ───────────────────────────────────────────────────────────
 	provider := providers.NewLocalProvider("http://127.0.0.1:8090", "qwen3.6-27B", "local-dev")
 
-	// ── Cognitive Profile ───────────────────────────────────────────────
 	cp := cognition.QwenDense()
 
-	// ── Preferences ─────────────────────────────────────────────────────
 	prefs := preferences.NewStore("runtime/preferences.jsonl")
 
-	// ── Engine ──────────────────────────────────────────────────────────
 	e := engine.New(provider, cp)
 	e.SetPreferences(prefs)
 
-	// Register tools
 	e.RegisterTool(weather.New())
 	e.RegisterTool(filesystem.NewList())
 	e.RegisterTool(filesystem.NewRead())
 	e.RegisterTool(filesystem.NewSearch())
 	e.RegisterTool(search.New())
 	e.RegisterTool(translate.New())
-	// More tools will be added as they're migrated from 66
 
-	// ── Process input ────────────────────────────────────────────────────
+	// Register procedural filesystem skill
+	fsTools := map[string]fs_skill.ToolRunner{
+		"filesystem_list":   filesystem.NewList(),
+		"filesystem_read":   filesystem.NewRead(),
+		"filesystem_search": filesystem.NewSearch(),
+	}
+	e.SetFilesystemSkill(fs_skill.New(fsTools))
+
 	input := strings.Join(os.Args[1:], " ")
 	if input == "" {
 		input = "你好"
