@@ -14,8 +14,10 @@ import (
 	"twinflower/runtime/engine"
 	fs_skill "twinflower/vascular/skills/filesystem_skill"
 	search_skill "twinflower/vascular/skills/search_skill"
+	"twinflower/stem/tools/currency"
 	"twinflower/stem/tools/filesystem"
 	"twinflower/stem/tools/search"
+	"twinflower/stem/tools/stock"
 	"twinflower/stem/tools/translate"
 	"twinflower/stem/tools/weather"
 )
@@ -33,6 +35,8 @@ func main() {
 	e.SetPreferences(prefs)
 
 	e.RegisterTool(weather.New())
+	e.RegisterTool(stock.New())
+	e.RegisterTool(currency.New())
 	e.RegisterTool(filesystem.NewList())
 	e.RegisterTool(filesystem.NewRead())
 	e.RegisterTool(filesystem.NewSearch())

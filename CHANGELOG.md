@@ -80,3 +80,66 @@ Level 3 (模糊)    → 正式 clarify（"你是想查天气还是新闻？"）
 | `d8c992d` | Translate baseline — 认知不污染简单任务 |
 | `97758dd` | Recency decay — 偏好遗忘机制 |
 | `e93b02e` | Soft execute — 三层决策完整闭环 |
+| `584055f` | Phase 3A: Filesystem Skill Deepening |
+| `ddc693f` | Phase 3B: Search Skill Deepening |
+
+---
+
+## 2026-05-18
+
+### Phase 3B: Search Skill Deepening
+
+search_skill 从直通式升级为五阶段管线。
+
+**交付内容：**
+- ambiguity detection：高频歧义词库（16 组）+ disambiguator 检测
+- clarify integration：高模糊返回 clarify 问题，无需模型调用
+- soft execute：中模糊执行 + hint 提示（"如果不是请纠正"）
+- ToolRunner 解耦：通过 tool interface 调用，消除与 stem/tools/search 的代码重复
+- 结果成形：结构化 header + 去重 + 截断 + 结果计数
+
+**附随修复：**
+- stem/tools/search: 添加 User-Agent 头解决 DDG bot 检测（202→200）
+- engine: isFilesystemRequest 移除 "search" 关键词，修复 bypass 抢占
+
+**里程碑含义：**
+Phase 3B 完成标志着双生花的 Skill 层从"路由契约"进入"程序化智能"阶段。搜索不再是 query→fetch→format 的直通，而是包含 ambiguity resolution 的完整认知管线。
+
+---
+
+### 从 66 移植基础模块
+
+从 66 (FangLab) 移植了 5 个基础模块到双生花。
+
+**基础设施（3 个）：**
+- `internal/envutil` — 类型化环境变量读取（String/Int/Bool/Duration），来自 66 的 `envutil`
+- `internal/httputil` — 共享 HTTP 客户端，合理超时/连接池/TLS 配置，来自 66 的 `httputil`
+- `internal/retry` — 指数退避 HTTP 重试（支持网络错误/5xx/429 自动重试），来自 66 的 `model/retry`
+
+**业务工具（2 个）：**
+- `stem/tools/stock` — Yahoo Finance API 股价查询（无 API Key），Provider 接口 + HTTP Provider，来自 66 的 `hermes/stock`
+- `stem/tools/currency` — open.er-api.com 汇率转换（无 API Key），Provider 接口 + HTTP Provider，来自 66 的 `hermes/currency`
+
+**修复：**
+- currency 工具修复了 66 中 API 字段名 bug（`conversion_rates` → `rates`，API v6 已变更）
+
+**战略含义：**
+这是双生花第一次从 66 吸收代码而非仅吸收经验。证明了两件事：
+1. 66 的干净模块可以零摩擦地适配双生花的简化接口
+2. 新架构下工具扩展只需：写实现 → 注册到 engine → 模型自动路由
+
+### 当前系统完整管线
+
+```
+input
+  → 根: cognition (profile + clarify threshold)
+  → 维管束: skill intent routing
+    → filesystem bypass (intent parser + path recovery + orchestration)
+    → search bypass (ambiguity detection → clarify/soft execute → execute → shape)
+    → 模型 plan (tool selection with contract constraints)
+      → preference resolution (EWMA + decay + correction)
+      → clarify (formal clarify with candidates)
+  → 茎: tool execution
+  → 反馈: calibration logging
+  → 根: finalize (natural response formatting)
+```
